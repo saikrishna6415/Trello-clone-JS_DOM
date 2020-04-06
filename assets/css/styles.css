@@ -8,4 +8,32 @@
     background-repeat: no-repeat;
     background-size: cover;
   }
+  .addButton {
+    width: 20vw;
+    padding: 1vw;
+    margin-left: 2vw;
+  }
+  .btn {
+    margin: 10px 0px;
+  }
+.itemInputDiv {
+    display: none;
+  }
+  .checkListContainer {
+    overflow: scroll;
+    max-height: 20vw;
+  }
+  .buttonsOfCheckList,
+  .buttonsOfCheckItems {
+    display: flex;
+    margin-bottom: 2vw;
+  }
+  .checkListItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .checkbox:checked + p{
+    text-decoration:line-through;
+  }
   
