@@ -140,7 +140,7 @@ function addCheckListtoDom(checklist){
         <button class="deleteButtonForCheckList btn btn-danger btn-xsm">x</button>
       </div>
       </div>
-      <div class=itemInputDiv><input class="itemInput form-control" placeholder="Enter Item Name">
+      <div class=itemInputDiv><input class="itemInput form-control" onfocus="this.value=''"placeholder="Enter Item Name">
       <div class='buttonsOfCheckItems'><div>
       <button class="addCheckItem btn btn-success btn-xsm">add New item</button>
       </div>
@@ -208,6 +208,9 @@ function selector(event) {
   } else if (event.target.classList.value === 'checkBox') {
     checkItemStatus(event);
   }
+  else if(event.target.classList.value === 'item'){
+    updateCheckListItem(event)
+  }
 }
 
 function deleteCheckList(event) {
@@ -253,7 +256,7 @@ function addCheckItem(event) {
       checkListItem.setAttribute('id', data.id);
       checkListItem.setAttribute('cardId', cardId);
       checkListItem.innerHTML = checkListItem.innerHTML +
-      `<input type="checkBox" class="checkBox"><p>${data.name}</p>
+      `<input type="checkBox" class="checkBox"><p class ='item'>${data.name}</p>
         <button class="btn btn-danger btn-xsm deleteButtonForItem">x<button>`;
       itemsContainer.appendChild(checkListItem);
       checkItemName.value = '';
@@ -275,7 +278,7 @@ function getAllCheckItems(id, cardId) {
         checkListItem.setAttribute('cardId', cardId);
         checkListItem.innerHTML =
           checkListItem.innerHTML +
-          `<input type="checkBox" class="checkBox"><p>${element.name}</p>
+          `<input type="checkBox" class="checkBox"><p class="item">${element.name}</p>
           <button class="btn btn-danger btn-xsm deleteButtonForItem">x<button>`;
         if (element.state === 'complete') {
           checkListItem.firstChild.checked = true;
@@ -305,3 +308,21 @@ function checkItemStatus(event) {
     }
   );
 }
+
+function updateCheckListItem(event) {
+  var cardId = event.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.getAttribute('id');
+  var checkItemId = event.target.parentElement.getAttribute('id');
+  console.log(event.target)
+  const newItemName = prompt("Enter Item Name")
+  fetch(`https://api.trello.com/1/cards/${cardId}/checkItem/${checkItemId}?name=${newItemName}&key=${key}&token=${token}`,{
+      method: 'PUT'
+    }
+  )
+  .then(data => data.json())
+    .then(data => {
+     var item = event.target
+     event.target.innerText = newItemName
+    });
+}
+
+
