@@ -18,10 +18,6 @@ body {
 .itemInputDiv {
   display: none;
 }
-.checkListContainer {
-  overflow: scroll;
-  max-height: 20vw;
-}
 .buttonsOfCheckList,
 .buttonsOfCheckItems {
   display: flex;
@@ -37,4 +33,8 @@ body {
 }
 .checkbox:checked + p {
   text-decoration: line-through;
+}
+.modal-content{
+  height: 100%;
+  overflow: scroll;
 }

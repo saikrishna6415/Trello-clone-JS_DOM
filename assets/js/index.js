@@ -138,7 +138,7 @@ function addCheckListtoDom(checklist){
         <div class='buttonsOfCheckList'>
         <div>
         <button class="addButtonForCheckItem btn btn-primary btn-xsm">add items</button>
-        <button class="deleteButtonForCheckList btn btn-danger btn-xsm " style ="margin-right:0px">x</button>
+        <button class="deleteButtonForCheckList btn btn-danger btn-xsm">x</button>
       </div>
       </div>
       <div class=itemInputDiv><input class="itemInput form-control" onfocus="this.value=''"placeholder="Enter Item Name">
