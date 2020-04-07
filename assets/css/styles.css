@@ -9,9 +9,8 @@ body {
   background-size: cover;
 }
 .addButton {
-  width: 20vw;
+  width: 90%;
   padding: 1vw;
-  margin-left: 2vw;
 }
 .btn {
   margin: 10px 0px;
@@ -32,6 +31,9 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+.checkbox + p {
+  margin: 0px;
 }
 .checkbox:checked + p {
   text-decoration: line-through;

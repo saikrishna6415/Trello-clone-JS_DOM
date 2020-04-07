@@ -30,7 +30,7 @@
     <div class="board">
         <div class="allCards" style="width: 25rem;">
           <div class="card">
-            <h5 class="card-title">List</h5>
+            <h5 class="card-title" style="padding: 30px; height: 3em;">List</h5>
             <div class="card hidediv" style="display: none;">
               <input type="text" class="form-control input" id="Input1"
               placeholder="Enter Card name..." onfocus="this.value=''">
@@ -89,9 +89,10 @@
                   class="checkListInputTag form-control"
                   type="text"
                   placeholder="enter check list"
+                  onfocus="this.value=''"
                 />
               </div>
-              <div class="checkListButtons">
+              <div class="checkListButtons d-flex justify-content-between">
                 <button class="checkListAddButton btn btn-success">
                   Add CheckList
                 </button>

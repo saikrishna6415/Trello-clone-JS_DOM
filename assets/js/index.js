@@ -135,13 +135,14 @@ function addCheckListtoDom(checklist){
         newCheckList.innerHTML =
         checklist.name +
         `<div class="itemsContainer"></div>
-        <div class='buttonsOfCheckList'><div>
+        <div class='buttonsOfCheckList'>
+        <div>
         <button class="addButtonForCheckItem btn btn-primary btn-xsm">add items</button>
-        <button class="deleteButtonForCheckList btn btn-danger btn-xsm">x</button>
+        <button class="deleteButtonForCheckList btn btn-danger btn-xsm " style ="margin-right:0px">x</button>
       </div>
       </div>
       <div class=itemInputDiv><input class="itemInput form-control" onfocus="this.value=''"placeholder="Enter Item Name">
-      <div class='buttonsOfCheckItems'><div>
+      <div class='buttonsOfCheckItems'><div d-flex justify-content-start>
       <button class="addCheckItem btn btn-success btn-xsm">add New item</button>
       </div>
       <div>
@@ -202,7 +203,7 @@ function selector(event) {
   else if (event.target.classList.value ==='deleteButtonForCheckItem btn btn-danger btn-xsm') {
     closeItemInput(event);
   } else if (
-    event.target.classList.value ==='btn btn-danger btn-xsm deleteButtonForItem'
+    event.target.classList.value ==='btn btn-default btn-xsm deleteButtonForItem'
   ) {
     deleteCheckItem(event);
   } else if (event.target.classList.value === 'checkBox') {
@@ -257,7 +258,7 @@ function addCheckItem(event) {
       checkListItem.setAttribute('cardId', cardId);
       checkListItem.innerHTML = checkListItem.innerHTML +
       `<input type="checkBox" class="checkBox"><p class ='item'>${data.name}</p>
-        <button class="btn btn-danger btn-xsm deleteButtonForItem">x<button>`;
+        <button class="btn btn-default btn-xsm deleteButtonForItem">x</button>`;
       itemsContainer.appendChild(checkListItem);
       checkItemName.value = '';
     });
@@ -279,7 +280,7 @@ function getAllCheckItems(id, cardId) {
         checkListItem.innerHTML =
           checkListItem.innerHTML +
           `<input type="checkBox" class="checkBox"><p class="item">${element.name}</p>
-          <button class="btn btn-danger btn-xsm deleteButtonForItem">x<button>`;
+          <button class="btn btn-default btn-xsm deleteButtonForItem">x</button>`;
         if (element.state === 'complete') {
           checkListItem.firstChild.checked = true;
           itemsContainer.appendChild(checkListItem);
