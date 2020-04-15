@@ -22,33 +22,38 @@ function addNewCard(event) {
   var cardName = document.querySelector('.input');
   console.log(cardName.value);
   if (cardName.value !== '') {
-    fetch(`https://api.trello.com/1/cards?name=${cardName.value}&idList=${listId}&keepFromSource=all&key=${key}&token=${token}`,{
-        method: 'POST'
-      }) .then(data => data.json())
-      .then(data => {
-        addcardtoDom(data)
-      });
+    fetch(`https://api.trello.com/1/cards?name=${cardName.value}&idList=${listId}&keepFromSource=all&key=${key}&token=${token}`, {
+      method: 'POST'
+    }).then(data => {
+      data.json()
+        .then(data => {
+          addcardtoDom(data)
+        })
+    })
+      .catch(error => {
+        console.log(error)
+      })
   }
 }
 
-function addcardtoDom(card){
+function addcardtoDom(card) {
   var cardTitle = document.createElement('div');
-        cardTitle.classList = 'card';
-        cardTitle.style.display = 'flex'
-        cardTitle.style.flexDirection = 'row'
-        cardTitle.style.justifyContent = 'space-between'
-        cardTitle.style.padding = '10px'
-        cardTitle.setAttribute('data-toggle', 'modal'); //it is use for open modal with respective card
-        cardTitle.setAttribute('data-target', `#${card.id}`);
-        cardTitle.setAttribute('cardId', card.id);
-        cardTitle.setAttribute('cardName', card.name);
-        cardTitle.innerHTML =
-        card.name +
-          `<div>
+  cardTitle.classList = 'card';
+  cardTitle.style.display = 'flex'
+  cardTitle.style.flexDirection = 'row'
+  cardTitle.style.justifyContent = 'space-between'
+  cardTitle.style.padding = '10px'
+  cardTitle.setAttribute('data-toggle', 'modal'); //it is use for open modal with respective card
+  cardTitle.setAttribute('data-target', `#${card.id}`);
+  cardTitle.setAttribute('cardId', card.id);
+  cardTitle.setAttribute('cardName', card.name);
+  cardTitle.innerHTML =
+    card.name +
+    `<div>
           <button class="deleteButton btn btn-danger btn-xsm">x</button>
         </div>`;
-        var allCards = document.querySelector('.allCards');
-        allCards.appendChild(cardTitle);
+  var allCards = document.querySelector('.allCards');
+  allCards.appendChild(cardTitle);
 }
 //close input block
 var closeButton = document.querySelector('.closeButton');
@@ -65,17 +70,20 @@ function closeInputBlock(event) {
 
 //Get all cards from trello dataBase and display
 function getAllCard() {
-  fetch(`https://api.trello.com/1/lists/${listId}/cards?key=${key}&token=${token}`,{
-      method: 'GET'
-    })
-    .then(data => data.json())
-    // .then(data => console.log(data));
-    .then(data =>
-      data.forEach(data => {
-        console.log(data)
-        addcardtoDom(data)
-      })
-    );
+  fetch(`https://api.trello.com/1/lists/${listId}/cards?key=${key}&token=${token}`, {
+    method: 'GET'
+  })
+    .then(data => {
+      data.json()
+        // .then(data => console.log(data));
+        .then(data =>
+          data.forEach(data => {
+            console.log(data)
+            addcardtoDom(data)
+          })
+        )
+    }).catch(error => console.log(error))
+
 }
 getAllCard();
 
@@ -87,11 +95,14 @@ cardList.addEventListener('click', deleteCard);
 function deleteCard(event) {
   if (event.target.classList.value === 'deleteButton btn btn-danger btn-xsm') {
     var cardId = event.target.parentElement.parentElement.getAttribute('cardId');
-    fetch(`https://api.trello.com/1/cards/${cardId}?key=${key}&token=${token}`,{
-        method: 'DELETE'
-      }).then(
+    fetch(`https://api.trello.com/1/cards/${cardId}?key=${key}&token=${token}`, {
+      method: 'DELETE'
+    }).then(
       () => (event.target.parentElement.parentElement.style.display = 'none')
-    );
+    )
+      .catch(error => {
+        console.log(error)
+      });
     event.stopPropagation();
   }
 }
@@ -127,14 +138,14 @@ function closeCheckListInput(event) {
 var checkListAddButton = document.querySelector('.checkListAddButton');
 checkListAddButton.addEventListener('click', addCheckList);
 
-function addCheckListtoDom(checklist){
+function addCheckListtoDom(checklist) {
   var newCheckList = document.createElement('div');
-        newCheckList.setAttribute('id', checklist.id);
-        newCheckList.classList = 'checkL';
-        newCheckList.style.padding = '10px'
-        newCheckList.innerHTML =
-        checklist.name +
-        `<div class="itemsContainer"></div>
+  newCheckList.setAttribute('id', checklist.id);
+  newCheckList.classList = 'checkL';
+  newCheckList.style.padding = '10px'
+  newCheckList.innerHTML =
+    checklist.name +
+    `<div class="itemsContainer"></div>
         <div class='buttonsOfCheckList'>
         <div>
         <button class="addButtonForCheckItem btn btn-primary btn-xsm">add items</button>
@@ -150,9 +161,9 @@ function addCheckListtoDom(checklist){
       </div>
       </div>
       </div>`;
-        var checkListContainer = document.querySelector('.checkListContainer');
-        console.log(checkListContainer);
-        checkListContainer.appendChild(newCheckList);
+  var checkListContainer = document.querySelector('.checkListContainer');
+  console.log(checkListContainer);
+  checkListContainer.appendChild(newCheckList);
 }
 
 function addCheckList(event) {
@@ -160,13 +171,16 @@ function addCheckList(event) {
   console.log(checkListName.value);
   var cardId = event.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.getAttribute('id');
   if (checkListName.value != '') {
-    fetch(`https://api.trello.com/1/checklists?idCard=${cardId}&name=${checkListName.value}&key=${key}&token=${token}`,{
-        method: 'POST'
-      })
-      .then(data => data.json())
+    fetch(`https://api.trello.com/1/checklists?idCard=${cardId}&name=${checkListName.value}&key=${key}&token=${token}`, {
+      method: 'POST'
+    })
       .then(data => {
-        addCheckListtoDom(data)
-      });
+        data.json()
+          .then(data => {
+            addCheckListtoDom(data)
+          })
+      })
+      .catch(error => console.log(error))
   }
 }
 
@@ -175,15 +189,18 @@ function getAllCheckList(cardId) {
   fetch(
     `https://api.trello.com/1/cards/${cardId}/checklists?checkItems=all&checkItem_fields=name%2CnameData%2Cpos%2Cstate&filter=all&fields=all&key=${key}&token=${token}`
   )
-    .then(data => data.json())
     .then(data => {
-      var checkListContainer = document.querySelector('.checkListContainer');
-      checkListContainer.innerHTML = '<p><p>'; //create empty checkList container
-      data.forEach(element => {
-        addCheckListtoDom(element)
-        getAllCheckItems(element.id, cardId);
-      });
-    });
+      data.json()
+        .then(data => {
+          var checkListContainer = document.querySelector('.checkListContainer');
+          checkListContainer.innerHTML = '<p><p>'; //create empty checkList container
+          data.forEach(element => {
+            addCheckListtoDom(element)
+            getAllCheckItems(element.id, cardId);
+          });
+        })
+    })
+    .catch(error => console.log(error))
 }
 
 //create event for  selector checkList
@@ -191,25 +208,25 @@ var checkListContainer = document.querySelector('.checkListContainer');
 checkListContainer.addEventListener('click', selector);
 
 function selector(event) {
-  if (event.target.classList.value ==='deleteButtonForCheckList btn btn-danger btn-xsm') {
+  if (event.target.classList.value === 'deleteButtonForCheckList btn btn-danger btn-xsm') {
     deleteCheckList(event);
   }
   else if (event.target.classList.value === 'addButtonForCheckItem btn btn-primary btn-xsm') {
     openItemInput(event);
-  } 
-  else if ( event.target.classList.value === 'addCheckItem btn btn-success btn-xsm' ) {
+  }
+  else if (event.target.classList.value === 'addCheckItem btn btn-success btn-xsm') {
     addCheckItem(event);
-  } 
-  else if (event.target.classList.value ==='deleteButtonForCheckItem btn btn-danger btn-xsm') {
+  }
+  else if (event.target.classList.value === 'deleteButtonForCheckItem btn btn-danger btn-xsm') {
     closeItemInput(event);
   } else if (
-    event.target.classList.value ==='btn btn-default btn-xsm deleteButtonForItem'
+    event.target.classList.value === 'btn btn-default btn-xsm deleteButtonForItem'
   ) {
     deleteCheckItem(event);
   } else if (event.target.classList.value === 'checkBox') {
     checkItemStatus(event);
   }
-  else if(event.target.classList.value === 'item'){
+  else if (event.target.classList.value === 'item') {
     updateCheckListItem(event)
   }
 }
@@ -221,7 +238,8 @@ function deleteCheckList(event) {
     method: 'DELETE'
   }).then(() => {
     event.target.parentElement.parentElement.parentElement.remove();
-  });
+  })
+    .catch(error => console.log(error))
   event.stopPropagation();
 }
 
@@ -249,26 +267,29 @@ function addCheckItem(event) {
     {
       method: 'POST'
     }
-  ) .then(data => data.json())
-    .then(data => {
-      var itemsContainer =event.target.parentElement.parentElement.parentElement.parentElement.childNodes[1];
-      var checkListItem = document.createElement('div');
-      checkListItem.classList = 'checkListItem';
-      checkListItem.setAttribute('id', data.id);
-      checkListItem.setAttribute('cardId', cardId);
-      checkListItem.innerHTML = checkListItem.innerHTML +
-      `<input type="checkBox" class="checkBox"><p class ='item'>${data.name}</p>
+  ).then(data => {
+    data.json()
+      .then(data => {
+        var itemsContainer = event.target.parentElement.parentElement.parentElement.parentElement.childNodes[1];
+        var checkListItem = document.createElement('div');
+        checkListItem.classList = 'checkListItem';
+        checkListItem.setAttribute('id', data.id);
+        checkListItem.setAttribute('cardId', cardId);
+        checkListItem.innerHTML = checkListItem.innerHTML +
+          `<input type="checkBox" class="checkBox"><p class ='item'>${data.name}</p>
         <button class="btn btn-default btn-xsm deleteButtonForItem">x</button>`;
-      itemsContainer.appendChild(checkListItem);
-      checkItemName.value = '';
-    });
+        itemsContainer.appendChild(checkListItem);
+        checkItemName.value = '';
+      })
+  })
+    .catch(error => console.log(error))
 }
 
 function getAllCheckItems(id, cardId) {
   console.log(id);
-  fetch(`https://api.trello.com/1/checklists/${id}/checkItems?key=${key}&token=${token}`,{
-      method: 'GET'
-    })
+  fetch(`https://api.trello.com/1/checklists/${id}/checkItems?key=${key}&token=${token}`, {
+    method: 'GET'
+  })
     .then(data => data.json())
     .then(data => {
       data.forEach(element => {
@@ -293,10 +314,11 @@ function deleteCheckItem(event) {
   var cardId = event.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.getAttribute('id');
   var checkItemId = event.target.parentElement.getAttribute('id');
   console.log(checkItemId);
-  fetch(`https://api.trello.com/1/cards/${cardId}/checkItem/${checkItemId}?key=${key}&token=${token}`,{
-      method: 'DELETE'
-    }
-  ).then(() => event.target.parentElement.remove());
+  fetch(`https://api.trello.com/1/cards/${cardId}/checkItem/${checkItemId}?key=${key}&token=${token}`, {
+    method: 'DELETE'
+  }
+  ).then(() => event.target.parentElement.remove())
+    .catch(error => console.log(error))
 }
 
 function checkItemStatus(event) {
@@ -304,10 +326,10 @@ function checkItemStatus(event) {
   var checkItemId = event.target.parentElement.getAttribute('id');
   var status = 'incomplete';
   if (event.target.checked == true) { status = 'complete'; }
-  fetch(`https://api.trello.com/1/cards/${cardId}/checkItem/${checkItemId}?state=${status}&key=${key}&token=${token}`,{
-      method: 'PUT'
-    }
-  );
+  fetch(`https://api.trello.com/1/cards/${cardId}/checkItem/${checkItemId}?state=${status}&key=${key}&token=${token}`, {
+    method: 'PUT'
+  })
+    .catch(error => console.log(error))
 }
 
 function updateCheckListItem(event) {
@@ -315,15 +337,18 @@ function updateCheckListItem(event) {
   var checkItemId = event.target.parentElement.getAttribute('id');
   console.log(event.target)
   const newItemName = prompt("Enter Item Name")
-  fetch(`https://api.trello.com/1/cards/${cardId}/checkItem/${checkItemId}?name=${newItemName}&key=${key}&token=${token}`,{
-      method: 'PUT'
-    }
+  fetch(`https://api.trello.com/1/cards/${cardId}/checkItem/${checkItemId}?name=${newItemName}&key=${key}&token=${token}`, {
+    method: 'PUT'
+  }
   )
-  .then(data => data.json())
     .then(data => {
-     var item = event.target
-     event.target.innerText = newItemName
-    });
+      data.json()
+        .then(data => {
+          var item = event.target
+          event.target.innerText = newItemName
+        })
+    })
+    .catch(error => console.log(error))
 }
 
 
